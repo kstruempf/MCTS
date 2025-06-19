@@ -89,6 +89,13 @@ You can find some examples using the MCTS here:
 Feel free to raise a new issue for any new feature or bug you've spotted. Pull requests are also welcomed if you're
 interested in directly improving the project.
 
+### Getting Started
+
+1. Create a virtual environment: `python -m venv .venv`
+2. Activate the environment and install dependencies: `pip install -r requirements.txt`
+3. Install the package in editable mode to work on it locally: `pip install -e .`
+4. Run tests with `pytest` before submitting a pull request.
+
 ### Coding Guidelines
 
 Commit message should follow the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification.
