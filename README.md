@@ -75,6 +75,15 @@ print(best_action)  # the best action to take found within the time limit
 print(reward)  # the expected reward for the best action
 ```
 
+### Parallel processing
+
+For faster rollouts you can run multiple worker processes using `search_parallel`.
+Simply provide the desired number of jobs:
+
+```python
+best_action = searcher.search_parallel(initial_state=initial_state, n_jobs=4)
+```
+
 **Examples**
 
 You can find some examples using the MCTS here:

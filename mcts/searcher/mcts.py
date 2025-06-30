@@ -172,9 +172,9 @@ class MCTS:
             
             for index, reward in return_dict.items():
             #for index, rez in return_dict.items():
-                self.backpropogate(input_nodes[index], reward)
+                self.backpropagate(input_nodes[index], reward)
                 #node, reward = rez
-                #self.backpropogate(node, reward)
+                #self.backpropagate(node, reward)
             
         best_child = self.get_best_child(self.root, 0)
         #best_child = self.get_best_child(root_shared, 0)
@@ -197,7 +197,7 @@ class MCTS:
         """
         node = self.select_node(self.root)
         reward = self.rollout_policy(node.state)
-        self.backpropogate(node, reward)
+        self.backpropagate(node, reward)
 
     def select_node(self, node: TreeNode) -> TreeNode:
         while not node.is_terminal:
@@ -222,7 +222,7 @@ class MCTS:
 
         raise Exception("Should never reach here")
 
-    def backpropogate(self, node: TreeNode, reward: float):
+    def backpropagate(self, node: TreeNode, reward: float):
         while node is not None:
             node.numVisits += 1
             node.totalReward += reward
