@@ -9,14 +9,16 @@ from mcts.searcher.mcts import MCTS
 
 
 class NaughtsAndCrossesState(BaseState):
-    def __init__(self):
+    """Simple tic-tac-toe implementation used for the examples and tests."""
+
+    def __init__(self) -> None:
         self.board = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
         self.currentPlayer = 1
 
-    def get_current_player(self):
+    def get_current_player(self) -> int:
         return self.currentPlayer
 
-    def get_possible_actions(self):
+    def get_possible_actions(self) -> list:
         possibleActions = []
         for i in range(len(self.board)):
             for j in range(len(self.board[i])):
@@ -24,13 +26,13 @@ class NaughtsAndCrossesState(BaseState):
                     possibleActions.append(Action(player=self.currentPlayer, x=i, y=j))
         return possibleActions
 
-    def take_action(self, action):
+    def take_action(self, action: "Action") -> "NaughtsAndCrossesState":
         newState = deepcopy(self)
         newState.board[action.x][action.y] = action.player
         newState.currentPlayer = self.currentPlayer * -1
         return newState
 
-    def is_terminal(self):
+    def is_terminal(self) -> bool:
         for row in self.board:
             if abs(sum(row)) == 3:
                 return True
@@ -43,7 +45,7 @@ class NaughtsAndCrossesState(BaseState):
                 return True
         return reduce(operator.mul, sum(self.board, []), 1) != 0
 
-    def get_reward(self):
+    def get_reward(self) -> float:
         for row in self.board:
             if abs(sum(row)) == 3:
                 return sum(row) / 3
@@ -58,21 +60,23 @@ class NaughtsAndCrossesState(BaseState):
 
 
 class Action(BaseAction):
-    def __init__(self, player, x, y):
+    """Action representing a move in the tic-tac-toe grid."""
+
+    def __init__(self, player: int, x: int, y: int) -> None:
         self.player = player
         self.x = x
         self.y = y
 
-    def __str__(self):
+    def __str__(self) -> str:
         return str((self.x, self.y))
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return str(self)
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         return self.__class__ == other.__class__ and self.x == other.x and self.y == other.y and self.player == other.player
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash((self.x, self.y, self.player))
 
 
