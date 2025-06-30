@@ -23,7 +23,7 @@ def test_random_policy_returns_reward():
 
 
 def test_connectmnk_horizontal_win():
-    state = ConnectMNKState(mColumns=3, nRows=3, kConnections=3)
+    state = ConnectMNKState(m_columns=3, n_rows=3, k_connections=3)
     state.board[0][0] = 1
     state.board[0][1] = 1
     state.board[0][2] = 1

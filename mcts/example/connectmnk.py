@@ -21,10 +21,10 @@ class ConnectMNKState(BaseState):
 
     playerNames = {1: 'O', -1: 'X'}
 
-    def __init__(self, mColumns=7, nRows=6, kConnections=4):
-        self.mColumns = mColumns
-        self.nRows = nRows
-        self.kConnections = kConnections
+    def __init__(self, m_columns: int = 7, n_rows: int = 6, k_connections: int = 4) -> None:
+        self.mColumns = m_columns
+        self.nRows = n_rows
+        self.kConnections = k_connections
         self.board = [[0 for _ in range(self.mColumns)] for _ in range(self.nRows)]
         self.currentPlayer = max(ConnectMNKState.playerNames.keys())
         self.isTerminated = None
@@ -32,7 +32,9 @@ class ConnectMNKState(BaseState):
         self.possibleActions = None
         self.winingPattern = None
 
-    def show(self):
+    def show(self) -> None:
+        """Print the game board to stdout."""
+
         rowText = ""
         for columnIndex in range(self.mColumns):
             rowText += f" {columnIndex % 10} "
@@ -48,10 +50,14 @@ class ConnectMNKState(BaseState):
             rowText += f" {rowIndex % 10} "
             print(rowText)
 
-    def get_current_player(self):
+    def get_current_player(self) -> int:
+        """Return the player whose turn it is."""
+
         return self.currentPlayer
 
-    def get_possible_actions(self):
+    def get_possible_actions(self) -> list:
+        """Return a (cached) list of all available actions."""
+
         if self.possibleActions is None:
             self.possibleActions = []
             for columnIndex in range(self.mColumns):
@@ -67,7 +73,9 @@ class ConnectMNKState(BaseState):
             random.shuffle(self.possibleActions)
         return self.possibleActions
 
-    def take_action(self, action):
+    def take_action(self, action: "Action") -> "ConnectMNKState":
+        """Return the successor state after applying ``action``."""
+
         newState = copy.copy(self)
         newState.board = copy.deepcopy(newState.board)
         newState.board[action.rowIndex][action.columnIndex] = action.player
@@ -77,7 +85,8 @@ class ConnectMNKState(BaseState):
         newState.winingPattern = None
         return newState
 
-    def is_terminal(self):
+    def is_terminal(self) -> bool:
+        """Return ``True`` if the current board is a terminal state."""
         if self.isTerminated is None:
             self.isTerminated = False
             for rowIndex in range(self.nRows):
@@ -137,7 +146,8 @@ class ConnectMNKState(BaseState):
 
         return self.isTerminated
 
-    def __getLineReward(self, line):
+    def __getLineReward(self, line: list) -> int:
+        """Return the reward for a single line of the board."""
         lineReward = 0
         if len(line) >= self.kConnections:
             for player in ConnectMNKState.playerNames.keys():
@@ -155,35 +165,38 @@ class ConnectMNKState(BaseState):
                     break
         return lineReward
 
-    def get_reward(self):
+    def get_reward(self) -> int:
         assert self.is_terminal()
         assert self.reward is not None
         return self.reward
 
 
 class Action(BaseAction):
-    def __init__(self, player, columnIndex, rowIndex):
+    """Action representing a move in the Connect(m,n,k) grid."""
+
+    def __init__(self, player: int, columnIndex: int, rowIndex: int) -> None:
         self.player = player
         self.rowIndex = rowIndex
         self.columnIndex = columnIndex
 
-    def __str__(self):
+    def __str__(self) -> str:
         return str((self.columnIndex, self.rowIndex))
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return str(self)
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         return self.__class__ == (other.__class__ and
                                   self.player == other.player and
                                   self.columnIndex == other.columnIndex and
                                   self.rowIndex == other.rowIndex)
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash((self.columnIndex, self.rowIndex, self.player))
 
 
-def extractStatistics(searcher, action):
+def extractStatistics(searcher, action) -> dict:
+    """Return simple statistics for ``action`` from ``searcher``."""
     statistics = {}
     statistics['rootNumVisits'] = searcher.root.numVisits
     statistics['rootTotalReward'] = searcher.root.totalReward
@@ -220,7 +233,7 @@ def main():
     runnableGames.append((8, 7, 5))
     runnableGames.append((9, 8, 6))
     (m, n, k) = random.choice(runnableGames)
-    currentState = ConnectMNKState(mColumns=m, nRows=n, kConnections=k)
+    currentState = ConnectMNKState(m_columns=m, n_rows=n, k_connections=k)
 
     turn = 0
     currentState.show()
